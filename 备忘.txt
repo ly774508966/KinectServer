@@ -1,0 +1,302 @@
+一.
+1搞清底层函数和参数作用。（大体清楚）
+2.    NUI_DEPTH_IMAGE_PIXEL （可以直接记录在这里）
+二.6个相机一起循环拍摄，验证是否丢帧（失败）
+
+所有Clinet的程序都要修改！！！（finish）
+注：出现数据为空时，其远程数据也为空，也就是说相机没有获取到数据，问题不是出现在Socket中！！！
+
+8月2日
+
+基础部分修改：
+{
+	client中的名称，A改为A0，A1？还有IP值（finish）
+	server中的IP地址（finish）
+	PCLFusion中的关于文件名的代码需要作出修改？（arg1传入）（暂时不需要做出修改）
+	注意Server的MainFrm.cpp的第396行，这里的fname应该是什么！！！可通过调用查的（finish）
+	还有Server的RightView.cpp的第506行，DoCmdPro函数，fname的内容是什么（finish）
+}
+
+开始修改，让系统自动完成多次拍摄
+1、大量拍摄后发现，出现空文件的情况仍然存在，而且100次拍摄出现了3处空文件，且无法还原，需查看底层代码
+2、重新测试，问题还是出现在了A0，B0，Z1上面；出错顺序是Z1->A0->B0；
+
+3、取经常出问题的A0做测试：
+当间隔时间取200ms时，过了大约20个就出问题且不能恢复
+当间隔时间取2000ms时，过了大约100个，其中只有1个问题，且可以恢复！
+
+4、再次测试，改时间间隔为1000ms，同样很快出现问题（也许是时间间隔问题？）
+5、五组相机一起测试，发现即使是3秒，仍然会出现空文件！！！（不是时间间隔的问题！！！）
+
+6、修改Kinect类的init函数中的初始化参数，将NUI_INITIALIZE_FLAG_USES_DEPTH_AND_PLAYER_INDEX
+	  改成NUI_INITIALIZE_FLAG_USES_DEPTH，重新做一次测试
+现象：101~105都是从第100次左右开始出现问题，104的状态一直保持不错
+
+7、查看Server中保存文件的顺序和相关代码（考虑使用分开线程的方法来发送和接收数据？？）
+接收顺序都是：Z1->A1->B1->Z0->A0->B0
+
+8、又一次测试，出现问题的是Z1，A0，B1，每个相机出现问题的概率大体相同，因此不像是相机本身质量问题
+
+9、（尝试查看微软提供的例子）
+发现Z1虽然为空，但是调用微软的exe程序，发现也能获得Color流但是Depth数据无法获得了！
+并导致重新获取Color失败
+
+先尝试做一些简单的修改。。。在Server的GetDepthData函数中做了两处修改
+想要使用D3D的程序，需要重新下载Microsoft DirectX SDK（June2010）
+
+8月5日
+1、测试，A0.B1.Z1出问题，首先解决Z1的问题
+
+2、pTextureDepth1->Release();添加这一行代码后测试
+结果是A1，B0，Z0出现了错误！
+
+3、if (WaitForSingleObject(m_hNextDepthFrameEvent,200)==0)
+程序进入不了这里面，无法接收到下一帧深度事件,重新拔插相机USB可以解决这个问题
+
+4、添加了部分错误处理函数，防止程序卡死
+实际没有达到需要的效果，程序还是会出现空文件的现象
+
+5、修改了LeftView中的绘图函数，现在可以正常显示浅色衣物了
+
+6、尝试每次重启服务端程序，查看效果如何
+效果不理想
+
+7、尝试取消每次拍摄时的CKinect的init和ShutDown的函数，查看效果如何
+{
+	针对所有单个相机的单独拍摄，连续数百次的拍摄，没有出现任何空文件！
+	针对6个相机的同时拍摄，在20个左右时，还是出现了空文件的情况！
+	也就是说，若是让client向server发送数据，就会出现错误（但怎么会影响到本地的保存的呢？）
+}
+
+8、尝试修改fprint函数到fwrite函数
+没有起到效果，Z0，B1，A1出现错误
+
+9、虽然不应该时Socket的问题，但还是做一下小小的修改，不让其每次都重新关闭和连接：
+//暂时将MySend中的Socket连接放到这里处理
+	for (int i=0;i<m_nPCNum;i++)
+	{
+		//m_pClientSocket[i]->Close();
+		m_pClientSocket[i]->Create();
+		m_pClientSocket[i]->Connect(m_sIP[i],nPort);
+		//m_pClientSocket[i]->SetLink(this);
+	}
+结果仍然有问题！出问题的是B0，B1
+	
+10、重新测试一次单个相机的连续拍摄
+结果很理想，说明不是相机连续拍摄导致的问题
+	
+11、发现Client程序中的OnTimer中有一段废代码，删除之：
+	//这一段没有什么用好像
+	//if (m_bAutoGrab)
+	//{
+	//	m_bAutoGrab=0;
+	//	OnBnClickedBtnClose();//这里面有ShutDown函数，难怪会出错！
+	//}
+	//else
+	//	SetTimer(0,2000,NULL);//每隔2秒拍摄一次
+	A0，A1，B0，B1出问题、
+	
+12、在Client的DoCmdPro中不执行OpenKinect，而是放在InitDialog中只执行一次：
+循环10次，没有出现任何问题！！
+	
+13、重新循环30次：
+同样没有出现问题！这个问题基本上已经算是解决了！
+		
+8月8日
+1、rightVeiw 420 行，有shutDown但是没有Init，所以只能拍摄一次
+考虑在400行下面添加OpenKinect函数，或者是处理完所有6个文件（定位）后再调用这个函数（finish）
+	
+2、Server部分做了部分简单的改动，下次使用时注意先将那边的源程序做个备份，以防不测（finish）
+	
+3、考虑将旋转合成图像显示的循环次数改小些，当前是1000次（finish）
+
+4、要将程序调试到如下状态：下一次检测到人时，应继续正常运行方可（finish）
+	
+5、重新将角度等值做标定，以求达到更好的效果（暂时效果仍不太好）
+
+6、尝试使用内雕设备，查看最终的效果（finish）
+
+7、利用HSV空间，将颜色背景去除（暂缓解决）
+
+8、将Client中保存本地文件的功能取消掉	（finish）
+	
+9、Z1图像没有保存下来（finish）
+
+10、提示信息的底色需要修改
+
+11、最重要的一步，需要将标定的功能整合到软件的内部，包括三维坐标变换和地面的四个参数（finish）
+
+8月11日
+1、需要添加单个部分关闭的代码（finish）
+2、底色修改不了？？
+3、同时打开多个文件（finish）
+4、添加上色功能，否则根本看不清
+
+5、明天修改颜色对话框的各种显示
+SetCheck
+GetCheck
+
+8.12
+尝试调整为每个相机只拍摄一次，从而保证拍摄中的稳定性（finish）
+
+8.15
+可以添加一个功能，直接跳转到我想要的视角(finish)
+
+转两圈，第二圈显示白色，最终的效果：（暂缓解决）
+	这里需要查看滤波程序的处理和保存的时间，如若时间太久，则只显示滤波前的白点，
+	若处理较快，则考虑在PCLFusion程序中，另行保存一个二进制的文件（先整合，再用fwrite函数直接输入）
+	考虑显示三种图片：带颜色未滤波（显示时间可以缩短），白色未滤波，白色滤波后
+
+设置两个view视图，同时实现两种颜色的显示（出现了难以解决的bug？？？）（finish）
+可能是因为OpenGL函数不能同时由两个类共同调用，这个暂时无法解决，有待回去查看资料，有待解决！！！（finish）
+
+需要一个金字塔型的模型（正在解决）
+
+ini文件中添加参数，确定远程是否保存数据文件
+
+将滤波后的文件另行保存在一个新的文件夹中，并将该文件夹设置为远程文件夹（finish）
+
+考虑将地面定标嵌入到该程序中，直接获得地面的4*3个参数（暂缓解决）
+
+正常工作时，如果重新有人进入时，应当直接终止显示，开始新一轮的拍摄（finish）
+
+正常工作时，需要隐藏按钮（finish）
+
+
+8.16
+首先让程序可以正常运行（finish）
+
+bug:修改dxf的保存路径时，运行会出现失败？
+
+今晚：
+添加功能，可手动调整每次转动的角度
+
+明天上午：
+标定地面；（finish）
+使用标定物标定所有参数；（finish）
+设置远程文件夹；（finish）
+带一份资源管理器加强工具来（finish）
+
+各种ini文件参数的添加和使用：
+		远程保存数据（finish）
+		显示每次转动角度（finish）
+并设计一个对话框用来修改这些数据（finish）
+
+{******************************************
+针对上一次滤波尚未完成二新的一轮拍摄已经开始的情况，可以使用如下的解决办法：（暂缓解决）
+		在主程序中建立一个字符串，用于保存每次拍摄的时间，在调用PLCFusion的时候，将最后一个作为新输入一个参数传入，
+		然后由PLCFusion创建一个新的文件，标志其为start还是finish，再不断地由主程序判断str_finish是否完成，这里的str就是我们传给脚本的时间
+		
+		（但是这样做有一个缺陷，那就是调用次数过多时，会出现内存不够而报错或是CPU负荷太大的情况，因此该方法可能需要删除）
+		（针对上面括号中的问题，还有一种解决办法，就是可以添加一个计数器，每次有一个人进入的时候，加1，处理完成一个dxf后，减一，根据这个计数器的数值就可以决定是否可以继续拍摄）
+
+		实在不行，就暂时不添加这个新点云的显示功能，先应付了明天的检查再说
+}******************************************
+
+ULtraEdit反撤销快捷键是什么（ctrl + Y）
+
+将标定地面的功能整合到标定程序中，可以实现实时的调整参数的功能
+		该功能可以回实验室做
+
+今晚的工作：
+主程序中添加一个参数设置对话框，修改和查看相关参数
+添加一个变量，记录每次转动的角度（主程序和标定程序都要有）（finish）
+调整视角后，同步显示在状态栏中（finish）
+隐藏的点云，应当处于不可编辑的状态（finish）
+添加左前，左后，右前，右后方向（finish）
+查看openGL有没有其他的一些去点算法等
+
+
+8.19晚
+将之前在实验室修改过的标定程序导入到主程序里面来（finish）
+保留两份sys.txt文件，一份是静物的，一份是人物的
+按照之前的思路，解决新的更新显示滤波后效果的功能（finish）
+PCLFusion暂时无法修改为release版本，这将会大大降低程序运行的效率（lib链接需要将Debug的修改为Release）（finish）
+没有成功将滤波后的文件正确显示出来，可能是某处的if语句出现了逻辑错误（finish）
+
+注意release下面生成失败，要注意是不是使用的静态编译！！！（finish）
+将所有的debug的lib改为release的lib（finish）
+自动配准算法？精简算法（简单版，但是没有效果？）
+几个对话框的初始位置
+主程序调用exe后，怎么释放该进程？
+
+{
+	开始滤波处理的时间为：
+	16 : 22 : 18 : 581
+	读取pcd文件结束的时间为：
+	16 : 22 : 21 : 77
+	移除离群点结束的时间为：
+	16 : 22 : 22 : 949
+	平滑处理结束的时间为：
+	16 : 22 : 50 : 717
+}
+
+只显示6张RGB平面图像：
+	1、可以直接用Socket传递bmp格式的图像，查看Kinect提供的代码。直接传递bmp格式的文件数据，并不需要保存该bmp文件
+	保存bmp时，有三步
+	bitmap file header —— bitmap info header —— RGB Data
+	可将这三个数据段保存为一个完整的结构体，一起发给主机
+	typedef struct tagBITMAPFILEHEADER {
+        WORD    bfType;
+        DWORD   bfSize;
+        WORD    bfReserved1;
+        WORD    bfReserved2;
+        DWORD   bfOffBits;
+	} BITMAPFILEHEADER, FAR *LPBITMAPFILEHEADER, *PBITMAPFILEHEADER;
+
+	typedef struct tagBITMAPINFOHEADER{
+        DWORD      biSize;
+        LONG       biWidth;
+        LONG       biHeight;
+        WORD       biPlanes;
+        WORD       biBitCount;
+        DWORD      biCompression;
+        DWORD      biSizeImage;
+        LONG       biXPelsPerMeter;
+        LONG       biYPelsPerMeter;
+        DWORD      biClrUsed;
+        DWORD      biClrImportant;
+	} BITMAPINFOHEADER, FAR *LPBITMAPINFOHEADER, *PBITMAPINFOHEADER;
+
+	/* Bitmap Header Definition */
+	typedef struct tagBITMAP
+  {
+    LONG        bmType;
+    LONG        bmWidth;
+    LONG        bmHeight;
+    LONG        bmWidthBytes;
+    WORD        bmPlanes;
+    WORD        bmBitsPixel;
+    LPVOID      bmBits;
+  } BITMAP, *PBITMAP, NEAR *NPBITMAP, FAR *LPBITMAP;
+
+	typedef struct tagBITMAPINFO {
+    	BITMAPINFOHEADER    bmiHeader;
+    	RGBQUAD             bmiColors[1];
+	} BITMAPINFO, FAR *LPBITMAPINFO, *PBITMAPINFO;
+	
+	主机得到这段数据后，转换成BITMAP格式，这一步可以参考网页文件中的详细介绍
+	m_InfoSize估计就是sizeof(BITMAPINFO)？？？
+	
+	第二种方案就是使用SetDIBitsToDevice函数，但介绍不多，不太好使用？如果得知使用方法的话，会简单很多
+	要注意的是 lpBIts 和 lpBitsInfo 必須是連續的內存空間
+	还有一个函数叫做StretchDIBits 
+	
+	
+分三段显示，滤波前，移除离群点，精简（两个版本都要添加）
+调整共享文件夹和打印软件的操作
+
+接下来这个版本用来显示平面图片
+
+2016.08.29
+新的设计思路：
+根据HSV空间的色彩深度，从而确定点云的疏密程度（具体落实有一定难度）
+如何操作能让点云的显示即清晰又不至于过于稀疏
+
+2016.9.29
+就目前而言，问题的根本并不是考虑在主程序中还是小程序中运行五官去除
+因为两者的效果几乎是完全一样的
+
+个人觉得，可能的原因是颜色空间和深度空间自带的误差
+
+保存出来的bmp格式的图片，下面有四分之一的区域丢失

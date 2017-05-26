@@ -1,0 +1,225 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="1、主体视图">
+      <UniqueIdentifier>{83b02673-321c-4250-aa97-d155b7ee348d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="0、基本框架">
+      <UniqueIdentifier>{9650de40-09f6-47db-8827-31d0ffb71867}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2、功能">
+      <UniqueIdentifier>{ad888a52-5208-4857-a1f0-ee524056d5af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3、对话框">
+      <UniqueIdentifier>{daee2451-1c27-4fd6-8219-e65f57e0d3d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4、usb5538">
+      <UniqueIdentifier>{69304d08-f059-4348-8cb0-7520c1f2f22d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+    <None Include="UserImages.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\KinectServer.rc2">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\KinectServerDoc.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\KinectServer.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\Toolbar.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\Toolbar256.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="usb5538\USB5538.h">
+      <Filter>4、usb5538</Filter>
+    </ClInclude>
+    <ClInclude Include="MyEdit.h">
+      <Filter>2、功能</Filter>
+    </ClInclude>
+    <ClInclude Include="MySplitterWnd.h">
+      <Filter>2、功能</Filter>
+    </ClInclude>
+    <ClInclude Include="asmfitting.h">
+      <Filter>2、功能</Filter>
+    </ClInclude>
+    <ClInclude Include="asmlibrary.h">
+      <Filter>2、功能</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageRenderer.h">
+      <Filter>2、功能</Filter>
+    </ClInclude>
+    <ClInclude Include="NuiApi.h">
+      <Filter>2、功能</Filter>
+    </ClInclude>
+    <ClInclude Include="NuiImageCamera.h">
+      <Filter>2、功能</Filter>
+    </ClInclude>
+    <ClInclude Include="NuiSensor.h">
+      <Filter>2、功能</Filter>
+    </ClInclude>
+    <ClInclude Include="NuiSkeleton.h">
+      <Filter>2、功能</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>0、基本框架</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>0、基本框架</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>0、基本框架</Filter>
+    </ClInclude>
+    <ClInclude Include="ParamDlg.h">
+      <Filter>3、对话框</Filter>
+    </ClInclude>
+    <ClInclude Include="CPoint3D.h">
+      <Filter>2、功能</Filter>
+    </ClInclude>
+    <ClInclude Include="MidView.h">
+      <Filter>1、主体视图</Filter>
+    </ClInclude>
+    <ClInclude Include="RightView.h">
+      <Filter>1、主体视图</Filter>
+    </ClInclude>
+    <ClInclude Include="LeftView.h">
+      <Filter>1、主体视图</Filter>
+    </ClInclude>
+    <ClInclude Include="LeftView2.h">
+      <Filter>1、主体视图</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket_client.h">
+      <Filter>2、功能</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>1、主体视图</Filter>
+    </ClInclude>
+    <ClInclude Include="KinectServer.h">
+      <Filter>0、基本框架</Filter>
+    </ClInclude>
+    <ClInclude Include="KinectServerDoc.h">
+      <Filter>0、基本框架</Filter>
+    </ClInclude>
+    <ClInclude Include="KinectServerView.h">
+      <Filter>0、基本框架</Filter>
+    </ClInclude>
+    <ClInclude Include="CWMPPlaylist.h">
+      <Filter>2、功能</Filter>
+    </ClInclude>
+    <ClInclude Include="CWMPSettings.h">
+      <Filter>2、功能</Filter>
+    </ClInclude>
+    <ClInclude Include="mediaplayer.h">
+      <Filter>2、功能</Filter>
+    </ClInclude>
+    <ClInclude Include="ocx1.h">
+      <Filter>2、功能</Filter>
+    </ClInclude>
+    <ClInclude Include="CWMPControls.h">
+      <Filter>2、功能</Filter>
+    </ClInclude>
+    <ClInclude Include="CWMPMedia.h">
+      <Filter>2、功能</Filter>
+    </ClInclude>
+    <ClInclude Include="CWMPPlayer4.h">
+      <Filter>2、功能</Filter>
+    </ClInclude>
+    <ClInclude Include="Kinect.h">
+      <Filter>1、主体视图</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingDlg.h">
+      <Filter>3、对话框</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MySplitterWnd.cpp">
+      <Filter>2、功能</Filter>
+    </ClCompile>
+    <ClCompile Include="MyEdit.cpp">
+      <Filter>2、功能</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageRenderer.cpp">
+      <Filter>2、功能</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>0、基本框架</Filter>
+    </ClCompile>
+    <ClCompile Include="ParamDlg.cpp">
+      <Filter>3、对话框</Filter>
+    </ClCompile>
+    <ClCompile Include="CPoint3D.cpp">
+      <Filter>2、功能</Filter>
+    </ClCompile>
+    <ClCompile Include="MidView.cpp">
+      <Filter>1、主体视图</Filter>
+    </ClCompile>
+    <ClCompile Include="RightView.cpp">
+      <Filter>1、主体视图</Filter>
+    </ClCompile>
+    <ClCompile Include="LeftView.cpp">
+      <Filter>1、主体视图</Filter>
+    </ClCompile>
+    <ClCompile Include="LeftView2.cpp">
+      <Filter>1、主体视图</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket_client.cpp">
+      <Filter>2、功能</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>1、主体视图</Filter>
+    </ClCompile>
+    <ClCompile Include="KinectServer.cpp">
+      <Filter>0、基本框架</Filter>
+    </ClCompile>
+    <ClCompile Include="KinectServerDoc.cpp">
+      <Filter>0、基本框架</Filter>
+    </ClCompile>
+    <ClCompile Include="KinectServerView.cpp">
+      <Filter>0、基本框架</Filter>
+    </ClCompile>
+    <ClCompile Include="CWMPPlaylist.cpp">
+      <Filter>2、功能</Filter>
+    </ClCompile>
+    <ClCompile Include="CWMPSettings.cpp">
+      <Filter>2、功能</Filter>
+    </ClCompile>
+    <ClCompile Include="mediaplayer.cpp">
+      <Filter>2、功能</Filter>
+    </ClCompile>
+    <ClCompile Include="ocx1.cpp">
+      <Filter>2、功能</Filter>
+    </ClCompile>
+    <ClCompile Include="CWMPControls.cpp">
+      <Filter>2、功能</Filter>
+    </ClCompile>
+    <ClCompile Include="CWMPMedia.cpp">
+      <Filter>2、功能</Filter>
+    </ClCompile>
+    <ClCompile Include="CWMPPlayer4.cpp">
+      <Filter>2、功能</Filter>
+    </ClCompile>
+    <ClCompile Include="Kinect.cpp">
+      <Filter>1、主体视图</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingDlg.cpp">
+      <Filter>3、对话框</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="KinectServer.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
