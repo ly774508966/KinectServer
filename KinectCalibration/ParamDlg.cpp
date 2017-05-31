@@ -399,26 +399,45 @@ void CParamDlg::SaveParam()
 	double degreez=_ttof(str);
 	double degreeZ=degreez*PI/180;
 
+
+
 	double a0[4][3];      //Ðý×ª¾ØÕó
-	a0[0][0]=cos(degreeY)*cos(degreeZ);
-	a0[0][1]=cos(degreeY)*sin(degreeZ);
-	a0[0][2]=-sin(degreeY);
+	
+	//Ðý×ªË³ÐòÊÇxyz
+	//a0[0][0]=cos(degreeY)*cos(degreeZ);
+	//a0[0][1]=cos(degreeY)*sin(degreeZ);
+	//a0[0][2]=-sin(degreeY);
+	
+	//a0[1][0]=-cos(degreeX)*sin(degreeZ)+sin(degreeX)*sin(degreeY)*cos(degreeZ);
+	//a0[1][1]=cos(degreeX)*cos(degreeZ)+sin(degreeX)*sin(degreeY)*sin(degreeZ);
+	//a0[1][2]=sin(degreeX)*cos(degreeY);
 
-	//z0[1][0] = -cos(degreeX3)*sin(degreeZ3) + sin(degreeX3)*sin(degreeY3)*cos(degreeZ3);
-	//z0[1][1] = cos(degreeX3)*cos(degreeZ3) + sin(degreeX3)*sin(degreeY3)*sin(degreeZ3);
-	//z0[1][2] = sin(degreeX3)*cos(degreeY3);
+	//a0[2][0]=sin(degreeX)*sin(degreeZ)+cos(degreeX)*sin(degreeY)*cos(degreeZ);
+	//a0[2][1]=-sin(degreeX)*cos(degreeZ)+cos(degreeX)*sin(degreeY)*sin(degreeZ);
+	//a0[2][2]=cos(degreeX)*cos(degreeY);
 
-	//z0[2][0] = sin(degreeX3)*sin(degreeZ3) + cos(degreeX3)*sin(degreeY3)*cos(degreeZ3);
-	//z0[2][1] = -sin(degreeX3)*cos(degreeZ3) + cos(degreeX3)*sin(degreeY3)*sin(degreeZ3);
-	//z0[2][2] = cos(degreeX3)*cos(degreeY3);
+	//Ðý×ªË³ÐòÊÇyxz£º
+	a0[0][0] = cos(degreeY)*cos(degreeZ) - sin(degreeX)*sin(degreeY)*sin(degreeZ);
+	a0[0][1] = cos(degreeY)*sin(degreeZ) - sin(degreeX)*sin(degreeY)*cos(degreeZ);
+	a0[0][2] = -cos(degreeX)*sin(degreeY);
+	a0[1][0] = -cos(degreeX)*sin(degreeZ);
+	a0[1][1] = cos(degreeX)*cos(degreeZ);
+	a0[1][2] = sin(degreeX);
+	a0[2][0] = sin(degreeY)*cos(degreeZ) + sin(degreeX)*cos(degreeY)*sin(degreeZ);
+	a0[2][1] = sin(degreeY)*sin(degreeZ) - sin(degreeX)*cos(degreeY)*cos(degreeZ);
+	a0[2][2] = cos(degreeX)*cos(degreeY);
 
-	a0[1][0]=-cos(degreeX)*sin(degreeZ)+sin(degreeX)*sin(degreeY)*cos(degreeZ);
-	a0[1][1]=cos(degreeX)*cos(degreeZ)+sin(degreeX)*sin(degreeY)*sin(degreeZ);
-	a0[1][2]=sin(degreeX)*cos(degreeY);
+	//Ðý×ªË³ÐòÊÇxzy£º
+	//a0[0][0] = cos(degreeY)*cos(degreeZ);
+	//a0[0][1] = sin(degreeZ);
+	//a0[0][2] = -sin(degreeY)*cos(degreeZ);
+	//a0[1][0] = sin(degreeX)*sin(degreeY) - cos(degreeX)*cos(degreeY)*sin(degreeZ);
+	//a0[1][1] = cos(degreeX)*cos(degreeZ);
+	//a0[1][2] = sin(degreeX)*cos(degreeY) + cos(degreeX)*sin(degreeY)*sin(degreeZ);
+	//a0[2][0] = cos(degreeX)*sin(degreeY) + sin(degreeX)*cos(degreeY)*sin(degreeZ);
+	//a0[2][1] = -sin(degreeY)*cos(degreeZ);
+	//a0[2][2] = cos(degreeX)*cos(degreeY) - sin(degreeX)*sin(degreeY)*sin(degreeZ);
 
-	a0[2][0]=sin(degreeX)*sin(degreeZ)+cos(degreeX)*sin(degreeY)*cos(degreeZ);
-	a0[2][1]=-sin(degreeX)*cos(degreeZ)+cos(degreeX)*sin(degreeY)*sin(degreeZ);
-	a0[2][2]=cos(degreeX)*cos(degreeY);
 
 	//Æ½ÒÆ¾ØÕó
 	GetDlgItem(IDC_EDIT_X)->GetWindowText(str);
