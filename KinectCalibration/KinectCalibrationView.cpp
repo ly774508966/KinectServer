@@ -999,24 +999,8 @@ void CKinectCalibrationView::ReadTxtPoint(CString filename)
 
 	void CKinectCalibrationView::ChangeMatrix(CString filename)
 	{
-		//ReadSysInfo();
-		//POINT6D f_points_new;
-		/*if (m_bOpenOriginTxt)
-		{
-		m_pointsZ0_new = m_pointsZ0;
-		m_pointsZ1_new = m_pointsZ1;
-		m_pointsA0_new = m_pointsA0;
-		m_pointsA1_new = m_pointsA1;
-		m_pointsB0_new = m_pointsB0;
-		m_pointsB1_new = m_pointsB1;
-		return;
-		}*/
 		if (filename.Find(_T("Z0"))!=-1)
 		{
-			//vector<POINT6D> m_pointsZ1;
-			//vector<POINT6D> m_pointsZ1_new;
-			//float      m_Rz1[3][3];     //旋转矩阵a
-			//float      m_Tz1[1][3];     //平移矩阵
 			if (m_pointsZ0_new.size()!=0)
 			{
 				m_pointsZ0_new.clear();
@@ -1060,10 +1044,6 @@ void CKinectCalibrationView::ReadTxtPoint(CString filename)
 		}
 		if (filename.Find(_T("Z1"))!=-1)
 		{
-			//vector<POINT6D> m_pointsZ1;
-			//vector<POINT6D> m_pointsZ1_new;
-			//float      m_Rz1[3][3];     //旋转矩阵a
-			//float      m_Tz1[1][3];     //平移矩阵
 			if (m_pointsZ1_new.size()!=0)
 			{
 				m_pointsZ1_new.clear();
@@ -1107,10 +1087,6 @@ void CKinectCalibrationView::ReadTxtPoint(CString filename)
 		}
 		if (filename.Find(_T("A0"))!=-1)
 		{
-			//vector<POINT6D> m_pointsA0;
-			//vector<POINT6D> m_pointsA0_new;
-			//float      m_Ra0[3][3];     //旋转矩阵a
-			//float      m_Ta0[1][3];     //平移矩阵
 			if (m_pointsA0_new.size()!=0)
 			{
 				m_pointsA0_new.clear();
@@ -1154,10 +1130,6 @@ void CKinectCalibrationView::ReadTxtPoint(CString filename)
 		}
 		if (filename.Find(_T("A1"))!=-1)
 		{
-			//vector<POINT6D> m_pointsA1;
-			//vector<POINT6D> m_pointsA1_new;
-			//float      m_Ra1[3][3];     //旋转矩阵a
-			//float      m_Ta1[1][3];     //平移矩阵
 			//程序第二次到这里时，该变量内部为错误的空间
 			if (m_pointsA1_new.size()!=0)
 			{
@@ -1203,10 +1175,6 @@ void CKinectCalibrationView::ReadTxtPoint(CString filename)
 		}
 		if (filename.Find(_T("B0"))!=-1)
 		{
-			//vector<POINT6D> m_pointsB0;
-			//vector<POINT6D> m_pointsB0_new;
-			//float      m_Rb0[3][3];     //旋转矩阵a
-			//float      m_Tb0[1][3];     //平移矩阵
 			if (m_pointsB0_new.size()!=0)
 			{
 				m_pointsB0_new.clear();

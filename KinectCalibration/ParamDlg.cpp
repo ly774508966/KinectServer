@@ -357,11 +357,9 @@ void CParamDlg::SaveParam()
 	GetDlgItem(IDC_EDIT_DX3)->GetWindowText(str);
 	double degreex3=_ttof(str);
 	double degreeX3=degreex3*PI/180;
-
 	GetDlgItem(IDC_EDIT_DY3)->GetWindowText(str);
 	double degreey3=_ttof(str);
 	double degreeY3=degreey3*PI/180;
-
 	GetDlgItem(IDC_EDIT_DZ3)->GetWindowText(str);
 	double degreez3=_ttof(str);
 	double degreeZ3=degreez3*PI/180;
@@ -394,11 +392,9 @@ void CParamDlg::SaveParam()
 	GetDlgItem(IDC_EDIT_DX)->GetWindowText(str);
 	double degreex=_ttof(str);
 	double degreeX=degreex*PI/180;
-
 	GetDlgItem(IDC_EDIT_DY)->GetWindowText(str);
 	double degreey=_ttof(str);
 	double degreeY=degreey*PI/180;
-
 	GetDlgItem(IDC_EDIT_DZ)->GetWindowText(str);
 	double degreez=_ttof(str);
 	double degreeZ=degreez*PI/180;
@@ -407,6 +403,14 @@ void CParamDlg::SaveParam()
 	a0[0][0]=cos(degreeY)*cos(degreeZ);
 	a0[0][1]=cos(degreeY)*sin(degreeZ);
 	a0[0][2]=-sin(degreeY);
+
+	//z0[1][0] = -cos(degreeX3)*sin(degreeZ3) + sin(degreeX3)*sin(degreeY3)*cos(degreeZ3);
+	//z0[1][1] = cos(degreeX3)*cos(degreeZ3) + sin(degreeX3)*sin(degreeY3)*sin(degreeZ3);
+	//z0[1][2] = sin(degreeX3)*cos(degreeY3);
+
+	//z0[2][0] = sin(degreeX3)*sin(degreeZ3) + cos(degreeX3)*sin(degreeY3)*cos(degreeZ3);
+	//z0[2][1] = -sin(degreeX3)*cos(degreeZ3) + cos(degreeX3)*sin(degreeY3)*sin(degreeZ3);
+	//z0[2][2] = cos(degreeX3)*cos(degreeY3);
 
 	a0[1][0]=-cos(degreeX)*sin(degreeZ)+sin(degreeX)*sin(degreeY)*cos(degreeZ);
 	a0[1][1]=cos(degreeX)*cos(degreeZ)+sin(degreeX)*sin(degreeY)*sin(degreeZ);
@@ -431,11 +435,9 @@ void CParamDlg::SaveParam()
 	GetDlgItem(IDC_EDIT_DX2)->GetWindowText(str);
 	double degreex2=_ttof(str);
 	double degreeX2=degreex2*PI/180;
-
 	GetDlgItem(IDC_EDIT_DY2)->GetWindowText(str);
 	double degreey2=_ttof(str);
 	double degreeY2=degreey2*PI/180;
-
 	GetDlgItem(IDC_EDIT_DZ2)->GetWindowText(str);
 	double degreez2=_ttof(str);
 	double degreeZ2=degreez2*PI/180;
@@ -639,10 +641,7 @@ void CParamDlg::OnBnClickedSaveZ0()
 
 void CParamDlg::OnBnClickedSaveZ1()
 {
-	//UpdateData(TRUE);
 	SaveParam();
-	/*CMainFrame *p = (CMainFrame*)AfxGetMainWnd();
-	CKinectCalibrationView *pView = (CKinectCalibrationView *)p->GetActiveView();*/
 	m_pView->ReadSysInfo();
 	m_strTimer = _T("Z1已保存");
 	SetTimer(1,20,NULL);
@@ -718,12 +717,10 @@ void CParamDlg::OnDeltaposSpinDx(NMHDR *pNMHDR, LRESULT *pResult)
 	double a;
 	GetDlgItem(IDC_EDIT_DX)->GetWindowText(str);
 	a=_ttof(str);
-	//if(pNMUpDown->iDelta == -1)  如果此值为-1 , 说明点击了Spin的往上的箭头
 	a+=pNMUpDown->iDelta*(-m_deltaAngle);
 	str.Format(_T("%.1f"),a);
 	GetDlgItem(IDC_EDIT_DX)->SetWindowText(str);
 	*pResult = 0;
-	//////////////////////////////////////////////////////////////////////////
 	OnBnClickedSaveA0();
 }
 
